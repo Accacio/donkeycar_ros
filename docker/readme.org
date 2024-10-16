@@ -1,0 +1,96 @@
+#+title: Readme
+* Docker
+** install docker
+We follow the instructions from https://docs.docker.com/engine/install/ubuntu/
+
+*** configure =apt=
+   #+begin_src sh
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+#+end_src
+*** Install packages
+#+begin_src sh
+sudo apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
+#+end_src
+*** test it
+#+begin_src sh
+sudo docker run hello-world
+#+end_src
+
+- N.B :: add user to docker group so we don't need =sudo= to run images
+#+begin_src sh
+sudo usermod -aG docker $USER
+#+end_src
+** Creating an image
+
+#+begin_src bash
+docker build -f Dockerfile.dev . -t ros-noetic-container-dev
+#+end_src
+* tmux_session.bash
+This script creates a tmux session running all the nodes necessary
+
+We create a new session named =discuter=
+#+begin_src bash :tangle tmux_session.bash
+#!/usr/bin/env bash
+
+tmux new-session -d -s discuter
+#+end_src
+
+We run =roscore= in the first window.
+#+begin_src bash :tangle tmux_session.bash
+tmux set-option -g mouse on
+tmux rename-window roscore
+tmux set-option -g -window roscore
+tmux send-keys "roscore" Enter
+#+end_src
+
+In a second window, we run two minecraft clients side by side, one for the =Architect= and another for the =Builder=
+#+begin_src bash :tangle tmux_session.bash
+tmux new-window
+tmux rename-window minecraft
+tmux send-keys "~/launchMalmo.bash" Enter
+tmux split -h
+tmux send-keys "~/launchMalmo.bash" Enter
+#+end_src
+
+Then, in another window, we run the launch file to open =overworld=, =ontologenius= and the =architect_publisher=
+#+begin_src bash :tangle tmux_session.bash
+tmux new-window
+tmux rename-window overwold
+tmux send-keys "cd ~/ros_ws/; . devel/setup.bash" Enter
+tmux send-keys "sleep 1;roslaunch malmo_ros architect_publisher.launch" Enter
+tmux split
+tmux send-keys "cd ~/ros_ws/; . devel/setup.bash" Enter
+tmux send-keys "sleep 1;roslaunch malmo_ros ontologenius.launch" Enter
+tmux split -h
+tmux send-keys "cd ~/ros_ws/; . devel/setup.bash" Enter
+tmux send-keys "sleep 1;roslaunch malmo_ros overworld.launch" Enter
+#+end_src
+
+In another window, we run the =dialog_manager= and the =malmo_interface=
+#+begin_src bash :tangle tmux_session.bash
+tmux new-window
+tmux rename-window ros_nodes
+tmux send-keys "cd ~/ros_ws/; . devel/setup.bash" Enter
+tmux send-keys "sleep 1;rosrun malmo_ros dialog_manager.py" Enter
+tmux split -h
+tmux send-keys "cd ~/ros_ws/; . devel/setup.bash" Enter
+tmux send-keys "sleep 1;rosrun malmo_ros malmo_interface.py" Enter
+#+end_src
+
+- N.B. :: notice we add a 1s sleep to wait for the =roscore=
+
+Finally, we attach to the session
+#+begin_src bash :tangle tmux_session.bash
+tmux a
+#+end_src
