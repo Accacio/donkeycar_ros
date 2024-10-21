@@ -31,11 +31,6 @@ sudo docker run hello-world
 #+begin_src sh
 sudo usermod -aG docker $USER
 #+end_src
-** Creating an image
-
-#+begin_src bash
-docker build -f Dockerfile.dev . -t ros-noetic-container-dev
-#+end_src
 * tmux_session.bash
 This script creates a tmux session running all the nodes necessary
 
@@ -54,16 +49,7 @@ tmux set-option -g -window roscore
 tmux send-keys "roscore" Enter
 #+end_src
 
-In a second window, we run two minecraft clients side by side, one for the =Architect= and another for the =Builder=
-#+begin_src bash :tangle tmux_session.bash
-tmux new-window
-tmux rename-window minecraft
-tmux send-keys "~/launchMalmo.bash" Enter
-tmux split -h
-tmux send-keys "~/launchMalmo.bash" Enter
-#+end_src
-
-Then, in another window, we run the launch file to open =overworld=, =ontologenius= and the =architect_publisher=
+In a second window, we run the nodes
 #+begin_src bash :tangle tmux_session.bash
 tmux new-window
 tmux rename-window overwold
@@ -77,17 +63,7 @@ tmux send-keys "cd ~/ros_ws/; . devel/setup.bash" Enter
 tmux send-keys "sleep 1;roslaunch malmo_ros overworld.launch" Enter
 #+end_src
 
-In another window, we run the =dialog_manager= and the =malmo_interface=
-#+begin_src bash :tangle tmux_session.bash
-tmux new-window
-tmux rename-window ros_nodes
-tmux send-keys "cd ~/ros_ws/; . devel/setup.bash" Enter
-tmux send-keys "sleep 1;rosrun malmo_ros dialog_manager.py" Enter
-tmux split -h
-tmux send-keys "cd ~/ros_ws/; . devel/setup.bash" Enter
-tmux send-keys "sleep 1;rosrun malmo_ros malmo_interface.py" Enter
-#+end_src
-
+# TODO verify if it is needed
 - N.B. :: notice we add a 1s sleep to wait for the =roscore=
 
 Finally, we attach to the session

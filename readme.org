@@ -10,3 +10,10 @@ tree -d -L 1 --noreport
 #+RESULTS:
 : .
 : └── docker
+
+
+* Creating an image
+
+#+begin_src bash
+docker build -f Dockerfile.dev . -t ros-noetic-container-dev
+#+end_src
