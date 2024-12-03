@@ -17,3 +17,14 @@ tree -d -L 1 --noreport
 #+begin_src bash
 docker build -f Dockerfile.dev . -t ros-noetic-container-dev
 #+end_src
+
+* Raspberry PI
+- Installed Buster version
+- Added SSH file to use ssh
+  ran =ssh-copy-id donkey@donkey.local=
+- installed OLED Display service
+  git clone https://github.com/accacio/pi-display
+* Installed
+#+begin_src bash
+ros-base
+#+end_src

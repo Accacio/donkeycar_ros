@@ -1,0 +1,9 @@
+#+title: Todo
+
+* Tasks
+** TODO include tmux in docker image
+*** TODO Create tmux session
+** TODO include bash_history in docker image
+** TODO Add gazebo simulation
+*** TODO Add car urdf
+**** TODO Add sonar to urdf
