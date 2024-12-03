@@ -7,3 +7,6 @@
 ** TODO Add gazebo simulation
 *** TODO Add car urdf
 **** TODO Add sonar to urdf
+** TODO Add RVIZ visualisation
+** TODO Add example with master in robot and client in PC
+** TODO Add example with master in PC and client in robot

@@ -31,14 +31,14 @@ sudo docker run hello-world
 #+begin_src sh
 sudo usermod -aG docker $USER
 #+end_src
-* tmux_session.bash
+* TODO tmux_session.bash
 This script creates a tmux session running all the nodes necessary
 
-We create a new session named =discuter=
+We create a new session named =donkeycar=
 #+begin_src bash :tangle tmux_session.bash
 #!/usr/bin/env bash
 
-tmux new-session -d -s discuter
+tmux new-session -d -s donkeycar
 #+end_src
 
 We run =roscore= in the first window.
@@ -52,15 +52,15 @@ tmux send-keys "roscore" Enter
 In a second window, we run the nodes
 #+begin_src bash :tangle tmux_session.bash
 tmux new-window
-tmux rename-window overwold
+tmux rename-window IO
 tmux send-keys "cd ~/ros_ws/; . devel/setup.bash" Enter
-tmux send-keys "sleep 1;roslaunch malmo_ros architect_publisher.launch" Enter
+tmux send-keys "sleep 1;roslaunch donkeycar architect_publisher.launch" Enter
 tmux split
 tmux send-keys "cd ~/ros_ws/; . devel/setup.bash" Enter
-tmux send-keys "sleep 1;roslaunch malmo_ros ontologenius.launch" Enter
+tmux send-keys "sleep 1;roslaunch donkeycar ontologenius.launch" Enter
 tmux split -h
 tmux send-keys "cd ~/ros_ws/; . devel/setup.bash" Enter
-tmux send-keys "sleep 1;roslaunch malmo_ros overworld.launch" Enter
+tmux send-keys "sleep 1;roslaunch donkeycar overworld.launch" Enter
 #+end_src
 
 # TODO verify if it is needed
